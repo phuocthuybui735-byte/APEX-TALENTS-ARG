@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackBox - Access Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000000;
+            min-height: 100vh;
+            overflow: hidden;
+            color: #FF0000;
+        }
+
+        /* 背景闪烁效果 */
+        @keyframes backgroundFlicker {
+            0%, 100% { background-color: #000000; }
+            50% { background-color: #1a0000; }
+        }
+
+        .flicker {
+            animation: backgroundFlicker 0.1s;
+        }
+
+        /* 瞳孔呼吸动画 */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .pupil {
+            width: 250px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #FF0000;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.8);
+            animation: pulse 4s infinite;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(90deg);
+        }
+
+        /* 瞳孔中心 */
+        .pupil::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #000000;
+            position: absolute;
+        }
+
+        /* 高亮反光 */
+        .pupil::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            position: absolute;
+            top: 20px;
+            left: 60px;
+        }
+
+        /* 输入框样式 */
+        .input-field {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #FF0000;
+            color: #FF0000;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+            padding: 5px 0;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-bottom-color: #cc0000;
+            box-shadow: 0 2px 0 #cc0000;
+        }
+
+        /* 按钮样式 */
+        .submit-btn {
+            background-color: #FF0000;
+            color: #000000;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 30px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #cc0000;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 提示文字闪烁 */
+        @keyframes textFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .flicker-text {
+            animation: textFlicker 2s infinite;
+        }
+
+        /* 错误信息抖动 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.3s;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+    <div class="text-center">
+        <!-- 瞳孔 -->
+        <div class="pupil mx-auto mb-16"></div>
+
+        <!-- 标题 -->
+        <h1 class="text-4xl font-bold mb-4 flicker-text">BLACKBOX</h1>
+
+        <!-- 提示语 -->
+        <p class="text-xl mb-8">
+            IDENTIFICATION REQUIRED. ENTER THE CORE VALUE.<br>
+            需要身份验证。输入核心价值观。
+        </p>
+
+        <!-- 输入框 -->
+        <input type="text" id="passwordInput" class="input-field" placeholder="ENTER VALUE" autocomplete="off">
+
+        <!-- 验证按钮 -->
+        <div class="mt-6">
+            <button id="submitBtn" class="submit-btn">验证</button>
+        </div>
+
+        <!-- 错误信息 -->
+        <p id="errorMsg" class="mt-6 text-lg hidden"></p>
+    </div>
+
+    <script>
+        const inputField = document.getElementById('passwordInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const body = document.body;
+
+        // 验证输入
+        function validateInput(input) {
+            const normalizedInput = input.trim().toLowerCase();
+            return normalizedInput === 'obedience' || normalizedInput === '服从';
+        }
+
+        // 显示成功消息
+        function showSuccess() {
+            alert('Access Granted\n授予访问权限');
+            window.location.href = 'admin_dashboard.html';
+        }
+
+        // 显示错误消息
+        function showError() {
+            errorMsg.textContent = 'DENIED: Subject shows resistance.\n拒绝：样本表现出抵抗意图';
+            errorMsg.classList.remove('hidden');
+            errorMsg.classList.add('shake');
+
+            // 添加背景闪烁效果
+            body.classList.add('flicker');
+            setTimeout(() => {
+                body.classList.remove('flicker');
+            }, 100);
+
+            // 清除抖动动画
+            setTimeout(() => {
+                errorMsg.classList.remove('shake');
+            }, 300);
+        }
+
+        // 处理提交
+        function handleSubmit() {
+            const inputValue = inputField.value;
+
+            if (validateInput(inputValue)) {
+                showSuccess();
+            } else {
+                showError();
+                inputField.value = '';
+            }
+        }
+
+        // 绑定事件
+        submitBtn.addEventListener('click', handleSubmit);
+
+        inputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSubmit();
+            }
+        });
+    </script>
+</body>
+</html>

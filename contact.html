@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Apex Talents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.05em;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 85, 255, 0.1);
+        }
+
+
+        /* 状态指示动画 */
+        @keyframes pulse-green {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .status-green {
+            background-color: #10b981;
+            animation: pulse-green 2s infinite;
+        }
+
+        .status-red {
+            background-color: #ef4444;
+            animation: pulse-red 0.8s infinite;
+        }
+
+        /* 表单样式 */
+        .form-input {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-input:focus {
+            border-color: #0055ff;
+            box-shadow: 0 0 0 3px rgba(0, 85, 255, 0.1);
+        }
+
+        /* 按钮样式 */
+        .submit-button {
+            background-color: #0055ff;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .submit-button:hover {
+            background-color: #0044dd;
+            opacity: 0.6;
+        }
+
+        /* 网格布局 */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        /* 监控面板样式 */
+        .monitor-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 85, 255, 0.1);
+        }
+
+        .node-item {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .node-item:last-child {
+            border-bottom: none;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="navbar fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 0L20 20H0L10 0z" />
+                    </svg>
+                    <span class="text-xl font-semibold tracking-wider text-blue-600">Apex Talents</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">首页</a>
+                    <a href="cases.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">成功案例</a>
+                    <a href="algorithm.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">算法介绍</a>
+                    <a href="contact.html" class="text-blue-600 hover:text-blue-800 transition-colors duration-300 font-medium">联系我们</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- 页面标题 -->
+            <div class="text-center mb-16">
+                <h1 class="text-4xl font-light text-gray-900 mb-2">Partner with Perfection</h1>
+                <h2 class="text-2xl font-light text-gray-600 mb-4">完美合作优质伙伴</h2>
+                <p class="text-lg text-gray-500 max-w-2xl mx-auto mb-2">
+                    Join forces with the future of talent acquisition. Our algorithms ensure 100% match accuracy.
+                </p>
+                <p class="text-base text-gray-400 max-w-2xl mx-auto">
+                    与人才招聘的未来携手合作。我们的算法确保100%的匹配精度。
+                </p>
+            </div>
+
+            <!-- 联系内容网格 -->
+            <div class="contact-grid">
+                <!-- 左侧：商务表单 -->
+                <div class="monitor-panel">
+                    <h2 class="text-2xl font-light text-gray-900 mb-6 border-b border-gray-200 pb-4">
+                        Business Inquiry (商务合作)
+                    </h2>
+
+                    <form id="contact-form">
+                        <div class="mb-6">
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                                Full Name (姓名)
+                            </label>
+                            <input type="text" id="name"
+                                   class="form-input w-full px-4 py-3 rounded-lg focus:outline-none"
+                                   placeholder="Enter your name (请输入您的姓名)">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                Business Email (企业邮箱)
+                            </label>
+                            <input type="email" id="email"
+                                   class="form-input w-full px-4 py-3 rounded-lg focus:outline-none"
+                                   placeholder="company@example.com (company@example.com)">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="interest" class="block text-sm font-medium text-gray-700 mb-2">
+                                Collaboration Interest (合作意向)
+                            </label>
+                            <select id="interest"
+                                    class="form-input w-full px-4 py-3 rounded-lg focus:outline-none">
+                                <option value="">Select an option (请选择)</option>
+                                <option value="enterprise">Enterprise Solution (企业解决方案)</option>
+                                <option value="partnership">Strategic Partnership (战略合作伙伴)</option>
+                                <option value="custom">Custom Development (定制开发)</option>
+                                <option value="other">Other (其他)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-8">
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                                Message (留言)
+                            </label>
+                            <textarea id="message" rows="4"
+                                      class="form-input w-full px-4 py-3 rounded-lg focus:outline-none resize-none"
+                                      placeholder="Tell us about your needs... (告诉我们您的需求...)"></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-button w-full">
+                            Submit Inquiry (提交申请)
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 右侧：网络节点监控 -->
+                <div class="monitor-panel">
+                    <h2 class="text-2xl font-light text-gray-900 mb-6 border-b border-gray-200 pb-4">
+                        Network Status / Real-time Diagnostics (网络节点监控/实时诊断)
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div class="node-item">
+                            <div>
+                                <p class="font-medium text-gray-900">North America Node (北美数据节点)</p>
+                                <p class="text-sm text-gray-500">旧金山数据中心</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="status-indicator status-green"></span>
+                                <span class="text-sm text-green-600">Online</span>
+                            </div>
+                        </div>
+
+                        <div class="node-item">
+                            <div>
+                                <p class="font-medium text-gray-900">Asia Pacific Node (亚太数据节点)</p>
+                                <p class="text-sm text-gray-500">新加坡数据中心</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="status-indicator status-green"></span>
+                                <span class="text-sm text-green-600">Online</span>
+                            </div>
+                        </div>
+
+                        <div class="node-item border-t-2 border-red-200 pt-4 mt-4">
+                            <div>
+                                <p class="font-medium text-gray-900">Central Neural Core (中央神经核心)</p>
+                                <p class="text-sm text-gray-500">核心计算单元</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="status-indicator status-red"></span>
+                                <span class="text-sm text-red-600">CORRUPTED</span>
+                            </div>
+                        </div>
+
+                        <!-- 系统信息 -->
+                        <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p class="text-sm text-blue-700 mb-2">
+                                <strong>System Alert (系统警告):</strong><br>
+                                Unusual neural activity detected (检测到异常神经活动)
+                            </p>
+                            <p class="text-xs text-blue-600">
+                                Please contact technical support for further assistance.<br>
+                                (请联系技术支持以获取进一步协助。)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <svg class="h-6 w-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 0L20 20H0L10 0z" />
+                        </svg>
+                        <span class="text-lg font-semibold tracking-wider text-blue-600">Apex Talents</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Eliminating human bias in recruitment.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-gray-900">About</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/about" class="text-gray-500 hover:text-blue-600 transition-colors">公司简介</a></li>
+                        <li><a href="/team" class="text-gray-500 hover:text-blue-600 transition-colors">团队介绍</a></li>
+                        <li><a href="/careers" class="text-gray-500 hover:text-blue-600 transition-colors">加入我们</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-gray-900">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/blog" class="text-gray-500 hover:text-blue-600 transition-colors">博客</a></li>
+                        <li><a href="/research" class="text-gray-500 hover:text-blue-600 transition-colors">研究报告</a></li>
+                        <li><a href="/support" class="text-gray-500 hover:text-blue-600 transition-colors">帮助中心</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-gray-900">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="text-gray-500 hover:text-blue-600 transition-colors">隐私政策</a></li>
+                        <li><a href="/terms" class="text-gray-500 hover:text-blue-600 transition-colors">服务条款</a></li>
+                        <li><a href="/compliance" class="text-gray-500 hover:text-blue-600 transition-colors">合规信息</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    © 2025 Apex Talents. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 表单提交处理
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            alert("Error: Connection timeout. Human support is currently unavailable.");
+        });
+
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>

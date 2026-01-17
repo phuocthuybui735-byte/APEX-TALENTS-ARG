@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX：完美算法 - 游戏介绍</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0055ff 0%, #0033cc 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #0055ff;
+            border-left: 4px solid #0055ff;
+            padding-left: 15px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .section ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #0055ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 85, 255, 0.3);
+        }
+
+        .link-button:hover {
+            background-color: #0044dd;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 85, 255, 0.4);
+        }
+
+        .link-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 85, 255, 0.3);
+        }
+
+        .highlight {
+            color: #0055ff;
+            font-weight: 700;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .note p {
+            margin: 0;
+            color: #856404;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .section h2 {
+                font-size: 1.3rem;
+            }
+
+            .link-button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>APEX：完美算法</h1>
+            <p class="subtitle">The Algorithm's Prey</p>
+        </div>
+
+        <div class="section">
+            <h2>引言</h2>
+            <p>今天是2026年的4月1日。你叫林缪，是一名前端工程师。你的姐姐林悦是一名才华横溢的数据分析师，也是你在这个世界唯一的依靠。</p>
+            <p>一个月前，林悦收到了顶尖科技巨头 “Apex Talents” 的终极面试邀请。据说这家公司拥有世界上最先进的招聘AI，能筛选出“完美员工”。林悦兴奋地去参加了那场封闭式面试，然而在那之后，她就像人间蒸发了一样。</p>
+            <p>警方表示，监控显示她确实走进了大楼，但没有任何出来的记录，公司方面则声称她“面试失败并已自行从后门离开”。你不相信活生生的人会凭空消失。昨晚，你在整理她的旧笔记本电脑时，发现浏览器后台挂着一个未关闭的网页——正是 Apex Talents 的官方宣传站。</p>
+            <p>但在网页的控制台代码里，你发现了一行林悦留下的乱码注释：“<span class="highlight">不要相信那个算法。</span>”</p>
+            <p>凭借职业嗅觉，你发现这个看似光鲜亮丽的官网背后，隐藏着一个巨大的数据库漏洞。只要输入特定的“指令关键词”，原本被加密的内部档案就会浮现。为了找回林悦，你决定利用这个漏洞，潜入这家公司的数字深处，揭开所谓的“完美招聘”背后令人毛骨悚然的真相……</p>
+        </div>
+
+        <div class="section">
+            <h2>玩法</h2>
+            <p><strong>游戏目的：</strong> 通过入侵 Apex Talents 官网并浏览内部数据：</p>
+            <ul>
+                <li>揭开 Apex 公司“完美员工改造计划”的真相。</li>
+                <li>决定林悦及你自己最终的命运。</li>
+            </ul>
+
+            <p><strong>游戏玩法：</strong> 这是一款“基于网页检索”的解谜游戏。你需要在看似正常的公司宣传页面中寻找违和感，提取“关键词”，并在网站内的【搜索框】中输入，从而解锁被隐藏的内部页面。</p>
+            <p><strong>推进方法：</strong> 阅读公司公开宣传页 → 察觉异样的词汇→ 在搜索入口输入 → 解锁内部档案 → 拼凑真相。</p>
+        </div>
+
+        <div class="section">
+            <h2>注意事项</h2>
+            <ul>
+                <li><strong>无需黑客技术：</strong>本游戏不要求任何编程或黑客知识。请只从肉眼可见的文本、图片信息中进行推理，无需查看源代码或修改文件。</li>
+                <li><strong>设备建议：</strong>强烈推荐使用电脑端游玩以获得最佳沉浸体验。手机端可能会导致部分故障特效显示不全。</li>
+                <li><strong>搜索规则：</strong></li>
+                <ul>
+                    <li>每次只能搜索 1个关键词。</li>
+                    <li>只支持 中文 或 特定的英文代码，请勿使用多余的空格或标点符号。</li>
+                </ul>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>入门提示</h2>
+            <p>阅读到这里，入侵行动正式开始。</p>
+            <p>把你带入林缪的视角，首先查看 Apex Talents 官网首页那些高高在上的宣传语吧。 如果不知道如何迈出第一步，试着在搜索框或登录界面输入你姐姐林悦在公司内部的代号，或者你在公开页面中发现的奇怪英文词汇。</p>
+            <p>祝你好运，希望你还没被系统发现。</p>
+        </div>
+
+        <div class="text-center">
+            <a href="intro.html" class="link-button">
+                [ 点击进入 Apex Talents 官网 ]
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Apex Talents. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

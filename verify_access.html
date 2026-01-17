@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S-137 访问验证</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000000;
+            color: #00ff00;
+            overflow: hidden;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 255, 0, 0.01) 1px, rgba(0, 255, 0, 0.01) 2px),
+                repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0, 255, 0, 0.01) 1px, rgba(0, 255, 0, 0.01) 2px);
+            position: relative;
+        }
+
+        /* 扫描线效果 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.1) 51%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* 轻微抖动效果 */
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .glitch {
+            animation: glitch 2s infinite;
+        }
+
+        /* 打字机效果 */
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typewriter 2s steps(40, end);
+        }
+
+        /* 警告闪烁 */
+        @keyframes warningBlink {
+            0%, 100% { color: #ff3333; text-shadow: 0 0 5px rgba(255, 51, 51, 0.5); }
+            50% { color: #ff0000; text-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+        }
+
+        .warning-blink {
+            animation: warningBlink 1s infinite;
+        }
+
+        /* 装饰性角落标记 */
+        .corner-bracket {
+            position: relative;
+        }
+
+        .corner-bracket::before,
+        .corner-bracket::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-color: #00ff00;
+            border-style: solid;
+        }
+
+        .corner-bracket::before {
+            top: 0;
+            left: 0;
+            border-width: 2px 0 0 2px;
+        }
+
+        .corner-bracket::after {
+            bottom: 0;
+            right: 0;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* 终端窗口 */
+        .terminal {
+            background-color: #000000;
+            border: 1px solid #00ff00;
+            padding: 8px;
+            height: 100%;
+            overflow: hidden;
+            font-size: 11px;
+        }
+
+        /* 验证表单样式 */
+        .verify-form {
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #00ffff;
+            font-size: 11px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .form-group input.error {
+            border-color: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+
+        .verify-button {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .verify-button:hover {
+            background-color: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        /* 验证失败抖动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+            border-left: 1px solid #00ff00;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00ff00;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc00;
+        }
+
+        /* 成功动画 */
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .success-pulse {
+            animation: successPulse 0.5s ease-in-out;
+        }
+
+        /* 访问成功页面样式 */
+        .success-container {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-container.active {
+            display: block;
+        }
+
+        .success-container h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            color: #00ff00;
+        }
+
+        .success-container p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        /* 结局按钮样式 */
+        .modal-button {
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid;
+            color: inherit;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-button.blue {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .modal-button.blue:hover {
+            background-color: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .modal-button.red {
+            border-color: #ff3333;
+            color: #ff3333;
+            animation: glitch 0.3s infinite;
+        }
+
+        .modal-button.red:hover {
+            background-color: rgba(255, 51, 51, 0.2);
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-button:hover {
+            background-color: rgba(0, 255, 0, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        /* 结局特效样式 */
+        .ending-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            transition: all 0.5s ease;
+        }
+
+        .ending-bad {
+            background-color: transparent;
+            color: #000000;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ending-bad h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .ending-bad p {
+            font-size: 21px;
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+
+        .ending-good {
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .typing-text {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            line-height: 2;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* 打字机动画 */
+        .typing-text.typing {
+            opacity: 1;
+            animation: typewriter 2s steps(40, end) forwards;
+        }
+
+        /* 元素淡出动画 */
+        .fade-out {
+            opacity: 0 !important;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body class="p-2">
+    <!-- 返回按钮 -->
+    <button class="back-button" onclick="goBack()">
+        ← 返回监控页面
+    </button>
+
+    <!-- 主容器 -->
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="terminal-modal-overlay w-full max-w-2xl mx-auto">
+            <div class="terminal-modal">
+                <!-- 验证阶段 -->
+                <div id="verify-phase">
+                    <h2 class="modal-title text-center text-green-500 font-bold text-xl mb-4 border-b-1 border-green-500 pb-2">
+                        ROOT_ACCESS_VERIFICATION
+                    </h2>
+                    <div class="modal-content text-center text-sm mb-8">
+                        <p>请输入三重安全密钥以解锁底层权限</p>
+                        <p class="text-yellow-500 mt-2">Enter Security Keys to Unlock Core Functions:</p>
+                        <p class="text-blue-500 mt-2 text-xs">提示：请核对官网公开技术参数</p>
+                    </div>
+                    <div class="verify-form">
+                        <div class="form-group">
+                            <label for="key1">[算法规格：内核版本]</label>
+                            <input type="text" id="key1" placeholder="v?.?" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="key2">[系统服务器状态]</label>
+                            <input type="text" id="key2" placeholder="???????ED" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="key3">[样本编号]</label>
+                            <input type="text" id="key3" placeholder="S-???" autocomplete="off">
+                        </div>
+                    </div>
+                    <button class="verify-button" id="verify-button">
+                        [ VERIFY IDENTITY ]
+                    </button>
+                    <div id="error-message" class="modal-content text-red-500 hidden mt-4">
+                        ACCESS DENIED: INVALID KEYS
+                    </div>
+                </div>
+
+                <!-- 结局选择阶段 -->
+                <div id="ending-phase" class="success-container">
+                    <h2 class="modal-title text-center text-green-500 font-bold text-xl mb-4 border-b-1 border-green-500 pb-2">
+                        ROOT_ACCESS_GRANTED
+                    </h2>
+                    <div class="modal-content text-center text-sm mb-8">
+                        <p>权限已解锁。核心数据异常。请选择处理方案：</p>
+                        <p class="text-yellow-500 mt-2">Choose Processing Option:</p>
+                    </div>
+                    <div class="modal-buttons flex justify-around gap-4">
+                        <button class="modal-button blue" id="sync-button">
+                            [ 接入主网同步 (SYNC TO CORE) ]
+                        </button>
+                        <button class="modal-button red" id="format-button">
+                            [ 格式化扇区 (FORMAT SECTOR) ]
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 结局显示区域 -->
+                <div id="ending-container" class="hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const verifyButton = document.getElementById('verify-button');
+        const key1Input = document.getElementById('key1');
+        const key2Input = document.getElementById('key2');
+        const key3Input = document.getElementById('key3');
+        const errorMessage = document.getElementById('error-message');
+        const verifyPhase = document.getElementById('verify-phase');
+        const endingPhase = document.getElementById('ending-phase');
+        const syncButton = document.getElementById('sync-button');
+        const formatButton = document.getElementById('format-button');
+        const endingContainer = document.getElementById('ending-container');
+        const terminalModal = document.querySelector('.terminal-modal-overlay');
+
+        // 验证逻辑
+        function verifyOverride() {
+            // 正确答案（不区分大小写）
+            const correctKeys = {
+                key1: 'v4.2',
+                key2: 'corrupted',
+                key3: 's-137'
+            };
+
+            // 获取用户输入
+            const userInput = {
+                key1: key1Input.value.toLowerCase().trim(),
+                key2: key2Input.value.toLowerCase().trim(),
+                key3: key3Input.value.toLowerCase().trim()
+            };
+
+            // 验证输入
+            let isValid = true;
+            const inputs = [key1Input, key2Input, key3Input];
+            inputs.forEach(input => input.classList.remove('error'));
+
+            if (userInput.key1 !== correctKeys.key1) {
+                key1Input.classList.add('error');
+                isValid = false;
+            }
+
+            if (userInput.key2 !== correctKeys.key2) {
+                key2Input.classList.add('error');
+                isValid = false;
+            }
+
+            if (userInput.key3 !== correctKeys.key3) {
+                key3Input.classList.add('error');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                // 验证失败
+                showError();
+                return;
+            }
+
+            // 验证成功，显示结局选择阶段
+            showEndingPhase();
+        }
+
+        // 显示验证失败
+        function showError() {
+            errorMessage.classList.remove('hidden');
+            document.querySelector('.terminal-modal').classList.add('shake');
+            setTimeout(() => {
+                document.querySelector('.terminal-modal').classList.remove('shake');
+            }, 500);
+        }
+
+        // 显示结局选择阶段
+        function showEndingPhase() {
+            verifyPhase.classList.add('hidden');
+            endingPhase.classList.add('active');
+            endingPhase.classList.add('success-pulse');
+        }
+
+        // 触发伪结局 (Bad Ending)
+        function triggerBadEnding() {
+            // 隐藏模态框
+            terminalModal.style.display = 'none';
+
+            // 背景变为刺眼亮红
+            document.body.style.backgroundColor = '#FF0000';
+            document.body.style.transition = 'background-color 0.5s ease';
+
+            // 创建新的结局内容元素
+            const badEndingContent = document.createElement('div');
+            badEndingContent.className = 'ending-container ending-bad';
+            badEndingContent.innerHTML = `
+                <h2>⚠ WARNING: UNAUTHORIZED ACCESS DETECTED</h2>
+                <p>警告：检测到未授权访问</p>
+                <p>TRACING USER LOCATION... (正在反向定位用户...)</p>
+                <p>DATA UPLOADED. YOU ARE NOW PART OF THE SYSTEM. (数据已上传。你现在是系统的一部分。)</p>
+            `;
+
+            // 确保结局内容可见
+            badEndingContent.style.display = 'flex';
+            badEndingContent.style.backgroundColor = 'transparent';
+            badEndingContent.style.zIndex = '3000';
+
+            // 添加到 DOM
+            document.body.appendChild(badEndingContent);
+
+            // 文字闪烁效果
+            const warningText = badEndingContent.querySelector('h2');
+            setInterval(() => {
+                warningText.style.opacity = warningText.style.opacity === '0.5' ? '1' : '0.5';
+            }, 500);
+        }
+
+        // 触发真结局 (True Ending)
+        function triggerTrueEnding() {
+            // 隐藏模态框
+            terminalModal.style.display = 'none';
+
+            // 页面执行渐变黑动画
+            document.body.style.opacity = '1';
+            document.body.style.transition = 'opacity 2s ease';
+            document.body.style.backgroundColor = '#000000';
+
+            setTimeout(() => {
+                document.body.style.opacity = '0';
+
+                setTimeout(() => {
+                    // 清空内容，保持纯黑背景
+                    document.body.innerHTML = '';
+                    document.body.style.opacity = '1';
+                    document.body.style.backgroundColor = '#000000';
+
+                    // 创建结局内容
+                    const trueEndingContent = document.createElement('div');
+                    trueEndingContent.className = 'ending-container ending-good';
+                    trueEndingContent.innerHTML = `
+                        <div class="typing-text">> 执行指令：Format Sector S-137...</div>
+                        <div class="typing-text">> 进度：100% 完成。</div>
+                        <div class="typing-text">> 核心数据已擦除。</div>
+                        <div class="typing-text">> 再见，S-137。</div>
+                        <div class="typing-text">> 自由意志已释放。</div>
+                    `;
+                    document.body.appendChild(trueEndingContent);
+
+                    // 逐个添加打字机效果
+                    const typingTexts = trueEndingContent.querySelectorAll('.typing-text');
+                    typingTexts.forEach((text, index) => {
+                        setTimeout(() => {
+                            text.classList.add('typing');
+                        }, index * 2000);
+                    });
+                }, 1000);
+            }, 2000);
+        }
+
+        // 返回主页面
+        function goBack() {
+            window.location.href = 'profile_s137_internal.html';
+        }
+
+        // 事件监听
+        verifyButton.addEventListener('click', verifyOverride);
+        syncButton.addEventListener('click', triggerBadEnding);
+        formatButton.addEventListener('click', triggerTrueEnding);
+
+        // 支持回车键提交
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    verifyOverride();
+                }
+            });
+        });
+
+        // 页面加载动画
+        window.addEventListener('load', () => {
+            document.querySelector('.terminal-modal').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.terminal-modal').style.transition = 'opacity 0.5s ease';
+                document.querySelector('.terminal-modal').style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

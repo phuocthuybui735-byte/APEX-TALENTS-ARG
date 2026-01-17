@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Architecture of Perfection - Apex Talents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0066FF;
+            --deep-gray: #333;
+            --light-gray: #F5F7FA;
+            --grid-color: rgba(0, 102, 255, 0.03);
+            --text-secondary: #666;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: var(--deep-gray);
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 背景网格与数学公式水印 */
+        .math-watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.04;
+            z-index: -1;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 19px, var(--grid-color) 19px, var(--grid-color) 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, var(--grid-color) 19px, var(--grid-color) 20px),
+                radial-gradient(circle at 20% 30%, rgba(0, 102, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 102, 255, 0.03) 0%, transparent 50%);
+        }
+
+        /* 科技蓝渐变文字 */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-blue), #00A3FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 代码块样式 */
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--light-gray);
+            border-left: 3px solid var(--primary-blue);
+            padding: 1rem;
+            border-radius: 0.25rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+
+        /* 动态数据模型动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .data-model {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* 脉冲节点动画 */
+        .pulse-node {
+            border-radius: 50%;
+            position: absolute;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        /* 连接线动画 */
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), transparent);
+            opacity: 0.3;
+            animation: flow 3s ease-in-out infinite;
+        }
+
+        @keyframes flow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        /* 悬停动画效果 */
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 102, 255, 0.1);
+        }
+
+        /* 装饰性元素 */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-color), transparent);
+            margin: 2rem 0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .desktop-only {
+                display: none;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* 数学公式装饰 */
+        .math-formula {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(0, 102, 255, 0.1);
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰 -->
+    <div class="math-watermark"></div>
+
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 0L20 20H0L10 0z" />
+                    </svg>
+                    <span class="text-xl font-semibold tracking-wider text-blue-600">Apex Talents</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">首页</a>
+                    <a href="cases.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">成功案例</a>
+                    <a href="algorithm.html" class="text-blue-600 hover:text-blue-800 transition-colors duration-300 font-medium">算法原理</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">联系我们</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Hero Section -->
+            <section class="mb-20">
+                <div class="flex items-center mb-4">
+                    <span class="text-sm text-gray-500 font-mono">Apex-II ENGINE v4.2</span>
+                    <span class="w-1 h-1 bg-gray-400 rounded-full mx-2"></span>
+                    <span class="text-sm text-gray-500 font-mono">DOC-2025-03-15</span>
+                </div>
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                    The Architecture of Perfection<br>
+                    <span class="text-3xl md:text-4xl font-light text-gray-600 mt-4 block">完美的架构</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mb-8">
+                    Beyond human intuition. Driven by hyper-dimensional data.<br>
+                    <span class="text-lg text-gray-500 mt-2 block">超越人类直觉。由超维数据驱动。</span>
+                </p>
+                <div class="divider"></div>
+            </section>
+
+            <!-- 内容网格 -->
+            <div class="content-grid grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+                <!-- 左侧技术文档 -->
+                <div class="lg:col-span-2 space-y-16">
+                    <!-- 技术概述 -->
+                    <section class="feature-card bg-white rounded-lg p-6 border border-gray-100">
+                        <h2 class="text-3xl font-semibold text-gray-900 mb-6">Technical Overview (技术概述)</h2>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            传统招聘流程充满主观偏见与随机失误。人类判断受到情绪波动、认知局限与社会刻板印象的严重干扰。Apex-II 引擎彻底摒弃了这种落后模式，引入纯数据驱动的招聘决策系统。
+                        </p>
+                        <p class="text-gray-600 leading-relaxed mb-6">
+                            Traditional recruitment processes are riddled with subjective bias and random errors. Human judgment is severely compromised by emotional fluctuations, cognitive limitations, and social stereotypes. The Apex-II Engine completely abandons this outdated model, introducing a pure data-driven recruitment decision system.
+                        </p>
+                        <div class="code-block">
+                            // Apex-II 引擎核心调用
+                            const candidate = extractCandidateVector(resume, behavioralData, biometrics);
+                            const position = getPositionRequirements(jobDescription, companyCulture);
+                            const compatibilityScore = neuralMatching(candidate, position);
+
+                            // 决策逻辑
+                            if (compatibilityScore > 0.99) {
+                                sendOffer(profile);
+                            } else {
+                                initiateRejection(profile, optimizationSuggestion);
+                            }
+                        </div>
+                    </section>
+
+                    <!-- 神经共振匹配 -->
+                    <section class="feature-card bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-semibold text-gray-900">Neural Resonance Matching (神经共振匹配)</h2>
+                                <span class="text-sm text-gray-500 font-mono">CORE MODULE I</span>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-medium text-gray-900 mb-4">Synaptic Mapping (突触映射)</h3>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            我们将候选人的思维模式转化为 1024 维向量，捕捉其专业技能、思维方式、行为模式与价值观的精确数学表达。每个神经元节点代表一个认知特征，节点间的连接强度反映了特征间的关联关系。
+                        </p>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            We convert candidate thinking patterns into 1024-dimensional vectors, capturing precise mathematical expressions of their professional skills, thinking styles, behavioral patterns, and values. Each neuron node represents a cognitive feature, and the connection strength between nodes reflects the correlation between features.
+                        </p>
+
+                        <h3 class="text-xl font-medium text-gray-900 mb-4">Cognitive Compatibility Score (认知兼容性评分)</h3>
+                        <p class="text-gray-600 leading-relaxed mb-6">
+                            通过毫秒级突触对齐计算，系统在多维向量空间中寻找完美匹配。该算法不仅考虑当前岗位需求，还预测了未来 3-5 年的发展潜力与公司文化融合度。
+                        </p>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            Through millisecond-level synaptic alignment calculations, the system finds perfect matches in the multidimensional vector space. The algorithm not only considers current position requirements but also predicts future development potential and company culture integration over 3-5 years.
+                        </p>
+                    </section>
+
+                    <!-- 预测性行为建模 -->
+                    <section class="feature-card bg-white rounded-lg p-6 border border-gray-100">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-semibold text-gray-900">Predictive Behavioral Modeling (预测性行为建模)</h2>
+                                <span class="text-sm text-gray-500 font-mono">CORE MODULE II</span>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-medium text-gray-900 mb-4">Micro-expression Tracking (微表情追踪)</h3>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            通过分析 0.1 秒内的瞳孔变化、面部微表情与肢体语言，系统可精确识别欺骗行为与真实情绪反应。这种技术已在国家安全领域得到验证，准确率高达 98.7%。
+                        </p>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            By analyzing pupil dilation, facial micro-expressions, and body language within 0.1 seconds, the system can accurately identify deception and true emotional responses. This technology has been validated in national security applications with an accuracy rate of 98.7%.
+                        </p>
+
+                        <h3 class="text-xl font-medium text-gray-900 mb-4">Psychometric Profiling (心理测量侧写)</h3>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            结合认知测试与情景模拟，系统构建完整的心理测量模型。通过对回答时间间隔、选择模式与犹豫频率的分析，预测员工未来 5 年的忠诚度、压力阈值与离职概率。
+                        </p>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            Combining cognitive tests and scenario simulations, the system constructs a complete psychometric model. By analyzing response time intervals, selection patterns, and hesitation frequencies, it predicts employee loyalty, stress thresholds, and turnover probability over the next 5 years.
+                        </p>
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
+                            <p class="text-blue-800 font-medium mb-2">Anomaly Detection (异常检测)</p>
+                            <p class="text-blue-600 text-sm">
+                                系统会自动标记不符合企业标准的行为模式，如过度思考、独立判断倾向过强或情绪波动过大。这些候选人将被分配到优化池进行认知修正。
+                            </p>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 右侧数据模型与技术参数 -->
+                <div class="lg:col-span-1 space-y-8">
+                    <!-- 试行区域 -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100 shadow-lg">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-6">Deployment Zones (试行区域)</h3>
+
+                        <!-- 地图导航 -->
+                        <div class="flex justify-center mb-4">
+                            <div class="bg-gray-100 p-1 rounded-lg">
+                                <button class="px-3 py-1 text-sm font-medium text-gray-700 bg-white rounded-md shadow-sm hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                    Global
+                                </button>
+                                <button class="px-3 py-1 text-sm font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                    Asia
+                                </button>
+                                <button class="px-3 py-1 text-sm font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                    Europe
+                                </button>
+                                <button class="px-3 py-1 text-sm font-medium text-gray-500 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                    Americas
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 全球地图 -->
+                        <div class="relative h-80 bg-gradient-to-br from-blue-50 to-white rounded-lg p-4 overflow-hidden">
+                            <div class="absolute inset-0 opacity-10">
+                                <svg viewBox="0 0 800 400" class="w-full h-full">
+                                    <!-- 地图路径（简化版） -->
+                                    <path d="M 100 200 L 200 150 L 300 180 L 400 160 L 500 190 L 600 170 L 700 150 L 800 180 L 800 400 L 0 400 Z" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+                                    <path d="M 100 200 L 50 250 L 100 300 L 200 280 L 300 300 L 400 270 L 500 280 L 600 260 L 700 240 L 800 220 L 800 180" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
+                                    <path d="M 0 250 L 100 200 L 100 300 L 0 350 Z" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
+                                    <path d="M 300 300 L 200 350 L 100 380 L 0 400 L 0 350 L 100 300" fill="#3b82f6" stroke="#60a5fa" stroke-width="2"/>
+                                </svg>
+                            </div>
+
+                            <!-- 试行城市标记 -->
+                            <div class="absolute" style="top: 20%; left: 15%;">
+                                <div class="w-3 h-3 bg-red-500 rounded-full pulse-node shadow-lg"></div>
+                                <div class="text-xs text-gray-700 mt-1 font-medium">San Francisco</div>
+                            </div>
+                            <div class="absolute" style="top: 25%; left: 35%;">
+                                <div class="w-3 h-3 bg-red-500 rounded-full pulse-node shadow-lg"></div>
+                                <div class="text-xs text-gray-700 mt-1 font-medium">London</div>
+                            </div>
+                            <div class="absolute" style="top: 35%; left: 65%;">
+                                <div class="w-3 h-3 bg-red-500 rounded-full pulse-node shadow-lg"></div>
+                                <div class="text-xs text-gray-700 mt-1 font-medium">Singapore</div>
+                            </div>
+                            <div class="absolute" style="top: 40%; left: 75%;">
+                                <div class="w-3 h-3 bg-red-500 rounded-full pulse-node shadow-lg"></div>
+                                <div class="text-xs text-gray-700 mt-1 font-medium">Tokyo</div>
+                            </div>
+                            <div class="absolute" style="top: 50%; left: 50%;">
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full pulse-node shadow-lg"></div>
+                                <div class="text-xs text-yellow-700 mt-1 font-medium">Shanghai</div>
+                            </div>
+                            <div class="absolute" style="top: 45%; left: 25%;">
+                                <div class="w-3 h-3 bg-green-500 rounded-full pulse-node shadow-lg"></div>
+                                <div class="text-xs text-green-700 mt-1 font-medium">New York</div>
+                            </div>
+
+                            <!-- 连接线 -->
+                            <div class="absolute inset-0">
+                                <div class="connection-line" style="top: 22%; left: 16%; width: 19%; transform: rotate(15deg); animation-delay: 0s;"></div>
+                                <div class="connection-line" style="top: 28%; left: 36%; width: 29%; transform: rotate(10deg); animation-delay: 0.5s;"></div>
+                                <div class="connection-line" style="top: 38%; left: 66%; width: 9%; transform: rotate(5deg); animation-delay: 1s;"></div>
+                                <div class="connection-line" style="top: 45%; left: 51%; width: 24%; transform: rotate(-15deg); animation-delay: 1.5s;"></div>
+                                <div class="connection-line" style="top: 48%; left: 26%; width: 24%; transform: rotate(20deg); animation-delay: 2s;"></div>
+                            </div>
+
+                            <!-- 地图标签 -->
+                            <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded-full text-xs font-mono text-blue-600 shadow-sm">
+                                Apex-II DEPLOYMENT MAP
+                            </div>
+                        </div>
+
+                        <!-- 试行数据指标 -->
+                        <div class="mt-6 space-y-4 bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 text-sm font-medium">激活区域</span>
+                                <span class="text-blue-600 font-bold">6</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 text-sm font-medium">已优化人数</span>
+                                <span class="text-blue-600 font-bold">12,458</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 text-sm font-medium">成功率</span>
+                                <span class="text-blue-600 font-bold">99.7%</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 text-sm font-medium">平均处理时间</span>
+                                <span class="text-blue-600 font-bold">3.2s</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 text-sm font-medium">待优化队列</span>
+                                <span class="text-blue-600 font-bold">1,892</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 技术参数（关键线索区） -->
+                    <div class="bg-gray-900 text-gray-300 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">System Specs (系统参数)</h3>
+                        <div class="font-mono text-sm space-y-2">
+                            <div class="flex justify-between">
+                                <span>Architecture:</span>
+                                <span class="text-white">Apex-Neural-X</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Latency:</span>
+                                <span class="text-white">&lt; 2ms</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Precision:</span>
+                                <span class="text-white">99.99%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-yellow-400">Kernel Version:</span>
+                                <span class="text-yellow-400 font-bold">v4.2</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Build:</span>
+                                <span class="text-white">2025.03.15</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 技术报告下载 -->
+                    <div class="bg-white rounded-lg p-6 border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Research Papers (研究报告)</h3>
+                        <ul class="space-y-3">
+                            <li>
+                                <a href="#" class="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+                                    <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    <span class="text-sm">Apex-II 引擎性能评估.pdf</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+                                    <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    <span class="text-sm">神经匹配算法研究.docx</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+                                    <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    <span class="text-sm">行为分析模型白皮书.pdf</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 页脚 -->
+            <footer class="mt-20 pt-8 border-t border-gray-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-4 md:mb-0">
+                            <p class="text-gray-500 text-sm">
+                                © 2025 Apex Talents. All rights reserved.
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-6">
+                            <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors text-sm">
+                                Terms of Service
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors text-sm">
+                                Privacy Policy
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors text-sm">
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        // 页面滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+
+        // 动态更新数据模型
+        function updateDataModel() {
+            const model = document.querySelector('.data-model');
+            if (model) {
+                // 随机改变节点位置
+                const nodes = model.querySelectorAll('.synaptic-node');
+                nodes.forEach(node => {
+                    const newTop = Math.random() * 80 + 10;
+                    const newLeft = Math.random() * 80 + 10;
+                    node.style.top = `${newTop}%`;
+                    node.style.left = `${newLeft}%`;
+                });
+            }
+        }
+
+        // 定期更新数据模型（每5秒）
+        setInterval(updateDataModel, 5000);
+    </script>
+</body>
+</html>

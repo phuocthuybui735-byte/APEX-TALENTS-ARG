@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S-137 深度执行监控 - 内部绝密</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #020202;
+            color: #00ff00;
+            overflow: hidden;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 255, 0, 0.01) 1px, rgba(0, 255, 0, 0.01) 2px),
+                repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0, 255, 0, 0.01) 1px, rgba(0, 255, 0, 0.01) 2px);
+            position: relative;
+        }
+
+        /* 扫描线效果 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.1) 51%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* 轻微抖动效果 */
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .glitch {
+            animation: glitch 0.3s infinite;
+        }
+
+        /* 数字跳动动画 */
+        @keyframes numberBounce {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .number-bounce {
+            animation: numberBounce 0.3s ease-in-out;
+        }
+
+        /* 打字机效果 */
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typewriter 2s steps(40, end);
+        }
+
+        /* 滚动动画 */
+        @keyframes scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        .scroll {
+            animation: scroll 20s linear infinite;
+        }
+
+        /* 警告闪烁 */
+        @keyframes warningBlink {
+            0%, 100% { color: #ff3333; text-shadow: 0 0 5px rgba(255, 51, 51, 0.5); }
+            50% { color: #ff0000; text-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+        }
+
+        .warning-blink {
+            animation: warningBlink 1s infinite;
+        }
+
+        /* 装饰性角落标记 */
+        .corner-bracket {
+            position: relative;
+        }
+
+        .corner-bracket::before,
+        .corner-bracket::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-color: #00ff00;
+            border-style: solid;
+        }
+
+        .corner-bracket::before {
+            top: 0;
+            left: 0;
+            border-width: 2px 0 0 2px;
+        }
+
+        .corner-bracket::after {
+            bottom: 0;
+            right: 0;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* 数据块样式 */
+        .data-block {
+            background-color: rgba(0, 10, 0, 0.7);
+            border: 1px solid #00ff00;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .data-block h4 {
+            color: #00ff00;
+            font-size: 11px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-block .value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .data-block .critical {
+            color: #ff3333;
+            animation: warningBlink 0.5s infinite;
+        }
+
+        /* 进度条样式 */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(0, 10, 0, 0.5);
+            border: 1px solid #00ff00;
+            margin-top: 6px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #00ff00;
+            position: relative;
+        }
+
+        .progress-fill.critical {
+            background-color: #ff3333;
+        }
+
+        /* 终端窗口 */
+        .terminal {
+            background-color: #000000;
+            border: 1px solid #00ff00;
+            padding: 8px;
+            height: 100%;
+            overflow: hidden;
+            font-size: 11px;
+        }
+
+        .terminal-log {
+            line-height: 1.4;
+            position: relative;
+        }
+
+        /* 系统日志颜色 */
+        .log-system { color: #00ff00; }
+        .log-kernel { color: #00ffff; }
+        .log-warning { color: #ffff00; }
+        .log-admin { color: #ff3333; }
+        .log-error { color: #ff0000; font-weight: bold; }
+
+        /* 网格布局 */
+        .dashboard-grid {
+            display: grid;
+            grid-template-areas:
+                "header header header"
+                "sidebar main console"
+                "footer footer footer";
+            grid-template-rows: 80px 1fr 60px;
+            grid-template-columns: 250px 1fr 300px;
+            gap: 4px;
+            height: 100vh;
+        }
+
+        /* 区域定义 */
+        .grid-header { grid-area: header; }
+        .grid-sidebar { grid-area: sidebar; }
+        .grid-main { grid-area: main; }
+        .grid-console { grid-area: console; }
+        .grid-footer { grid-area: footer; }
+
+        /* 隐藏线索 - 涂改显形效果 */
+        .signature-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .official-signature {
+            color: #00ff00;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .signature-container:hover .official-signature {
+            color: #666666;
+            text-decoration: line-through #ff3333 2px;
+            opacity: 0.7;
+        }
+
+        .hidden-warning {
+            opacity: 0;
+            max-width: 0;
+            overflow: hidden;
+            color: #ff3333;
+            font-weight: bold;
+            margin-left: 0;
+            transition: all 0.3s ease 0.2s;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .signature-container:hover .hidden-warning {
+            opacity: 1;
+            max-width: 200px;
+            margin-left: 12px;
+            padding: 4px 8px;
+            background-color: rgba(255, 51, 51, 0.1);
+            border: 1px solid #ff3333;
+            border-radius: 2px;
+        }
+
+        .signature-container::selection {
+            background-color: #ff3333;
+            color: #020202;
+        }
+
+        /* 紧急协议按钮样式 */
+        .emergency-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 8px 16px;
+            background-color: rgba(255, 51, 51, 0.1);
+            border: 2px solid #ff3333;
+            color: #ff3333;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: warningBlink 1s infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+        }
+
+        .emergency-button:hover {
+            background-color: rgba(255, 51, 51, 0.3);
+            box-shadow: 0 0 25px rgba(255, 51, 51, 0.8);
+            transform: scale(1.05);
+        }
+
+        .emergency-button:active {
+            transform: scale(0.95);
+        }
+
+        /* 终端模态框样式 */
+        .terminal-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 0.3s ease;
+        }
+
+        .terminal-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .terminal-modal {
+            background-color: #000000;
+            border: 2px solid #00ff00;
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .modal-title {
+            color: #00ff00;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal-content {
+            color: #00ff00;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        /* 验证表单样式 */
+        .verify-form {
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #00ffff;
+            font-size: 11px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .form-group input.error {
+            border-color: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+
+        .verify-button {
+            width: 100%;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .verify-button:hover {
+            background-color: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid;
+            color: inherit;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-button.blue {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .modal-button.blue:hover {
+            background-color: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .modal-button.red {
+            border-color: #ff3333;
+            color: #ff3333;
+            animation: glitch 0.3s infinite;
+        }
+
+        .modal-button.red:hover {
+            background-color: rgba(255, 51, 51, 0.2);
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+        }
+
+        /* 验证失败抖动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* 结局特效样式 */
+        .ending-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            transition: all 0.5s ease;
+        }
+
+        .ending-bad {
+            background-color: #ff0000;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .ending-bad h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .ending-bad p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        .ending-good {
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .typing-text {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            line-height: 2;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* 打字机动画 */
+        .typing-text.typing {
+            opacity: 1;
+            animation: typewriter 2s steps(40, end) forwards;
+        }
+
+        /* 元素淡出动画 */
+        .fade-out {
+            opacity: 0 !important;
+            transition: opacity 0.5s ease;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+            border-left: 1px solid #00ff00;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00ff00;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc00;
+        }
+    </style>
+</head>
+<body class="p-2">
+    <!-- 紧急协议按钮 -->
+    <button class="emergency-button" id="emergency-button">
+        ⚠ 紧急协议 (EMERGENCY PROTOCOL)
+    </button>
+
+    <div class="dashboard-grid">
+        <!-- 头部 -->
+        <div class="grid-header corner-bracket bg-black border border-green-500 p-4 flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h1 class="text-red-600 font-bold text-sm warning-blink">TOP SECRET // LEVEL-5 CLEARANCE ONLY</h1>
+                    <p class="text-green-500 text-xs mt-1">ID: S-137 (Type: Deep Execution / Depth-V4)</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-yellow-500 text-xs">SYSTEM: ONLINE</p>
+                    <p class="text-cyan-500 text-xs">TIMESTAMP: <span id="timestamp">00:00:00</span></p>
+                </div>
+            </div>
+            <div class="flex justify-between items-end mt-2">
+                <div>
+                    <p class="text-green-500 text-xs">原名: 林悦 | 来源: 外部捕获</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-yellow-500 text-xs">当前任务: <span id="task">等待指令输入...</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 左侧：生理指征 -->
+        <div class="grid-sidebar corner-bracket bg-black border border-green-500 p-4 overflow-y-auto">
+            <h3 class="text-green-500 font-bold text-sm mb-4 border-b-1 border-green-500 pb-2">生理指征 (Vital Signs - Unnatural Data)</h3>
+
+            <!-- 心率 -->
+            <div class="data-block">
+                <h4>心率 (HR)</h4>
+                <div class="flex justify-between items-end">
+                    <span class="value" id="hr-value">45</span>
+                    <span class="text-xs text-cyan-500">BPM (强制镇静状态)</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 30%"></div>
+                </div>
+            </div>
+
+            <!-- 皮质醇 -->
+            <div class="data-block">
+                <h4>皮质醇 (Stress)</h4>
+                <div class="flex justify-between items-end">
+                    <span class="value critical" id="cortisol-value">CRITICAL HIGH</span>
+                    <span class="text-xs text-red-500">指数级溢出</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill critical" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- 多巴胺 -->
+            <div class="data-block">
+                <h4>多巴胺 (Reward)</h4>
+                <div class="flex justify-between items-end">
+                    <span class="value" id="dopamine-value">LOCKED</span>
+                    <span class="text-xs text-gray-500">已物理阻断</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- 睡眠需求 -->
+            <div class="data-block">
+                <h4>睡眠需求 (Sleep)</h4>
+                <div class="flex justify-between items-end">
+                    <span class="value" id="sleep-value">0.00</span>
+                    <span class="text-xs text-gray-500">Hours (已移除)</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- 营养输送 -->
+            <div class="data-block">
+                <h4>营养输送</h4>
+                <div class="flex justify-between items-end">
+                    <span class="value" id="nutrition-value">静脉注射</span>
+                    <span class="text-xs text-green-500">运行中</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 中间：神经改造进度 -->
+        <div class="grid-main corner-bracket bg-black border border-green-500 p-4 overflow-y-auto">
+            <h3 class="text-green-500 font-bold text-sm mb-4 border-b-1 border-green-500 pb-2">神经改造进度 (Neural Modification)</h3>
+
+            <!-- 逻辑模块 -->
+            <div class="data-block mb-6">
+                <h4>逻辑模块 (Logic Core)</h4>
+                <div class="flex justify-between items-end">
+                    <span class="value" id="logic-value">100%</span>
+                    <span class="text-xs text-yellow-500">Overclocked/超频</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- 共情模块 -->
+            <div class="data-block mb-6">
+                <h4>共情模块 (Empathy)</h4>
+                <div class="flex justify-between items-end">
+                    <span class="value critical" id="empathy-value">ERROR: FAILED TO DELETE</span>
+                    <span class="text-xs text-red-500" id="humanity-residual" style="cursor: pointer;" onclick="downloadDiary()">删除失败，残留 0.02%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill critical" style="width: 0.02%"></div>
+                </div>
+            </div>
+
+            <!-- 记忆扇区 -->
+            <div class="data-block">
+                <h4>记忆扇区 (Memory Sectors)</h4>
+                <div class="mt-2 space-y-2">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-cyan-500">[2018-2023]</span>
+                        <span class="text-green-500">格式化完成 (Formatted)</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-cyan-500">[童年记忆]</span>
+                        <span class="text-yellow-500">归档至深层冷库</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-cyan-500">[近期记忆]</span>
+                        <span class="text-red-500">重写中...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧：系统日志 -->
+        <div class="grid-console corner-bracket bg-black border border-green-500 p-4 flex flex-col">
+            <h3 class="text-green-500 font-bold text-sm mb-2 border-b-1 border-green-500 pb-1">系统日志 (System Logs - Narrative)</h3>
+            <div class="terminal flex-1">
+                <div class="terminal-log scroll" id="system-logs">
+                    <p><span class="log-system">[System]</span> 注入镇定剂... 成功。</p>
+                    <p><span class="log-kernel">[Kernel]</span> 拦截到异常思维波动："我想回家"。 -> 自动删除。</p>
+                    <p><span class="log-kernel">[Kernel]</span> 拦截到异常思维波动："这是哪里"。 -> 自动删除。</p>
+                    <p><span class="log-warning">[Warning]</span> 检测到潜意识抵抗。</p>
+                    <p><span class="log-admin">[Admin]</span> 加大 "服从" 算法权重至 Level 9。</p>
+                    <p><span class="log-system">[System]</span> 记忆重写模块启动。</p>
+                    <p><span class="log-error">[ERROR]</span> 共情模块删除失败，残留 0.02%。</p>
+                    <p><span class="log-system">[System]</span> 开始强制镇静。</p>
+                    <p><span class="log-warning">[Warning]</span> 皮质醇水平持续升高。</p>
+                    <p><span class="log-admin">[Admin]</span> 指令输入：执行深度优化。</p>
+                    <p><span class="log-kernel">[Kernel]</span> 神经同步深度：99.98% (CRITICAL)</p>
+                    <p><span class="log-error">[ERROR]</span> 检测到异常脑电波活动。</p>
+                    <p><span class="log-admin">[Admin]</span> 增强镇定剂剂量。</p>
+                    <p><span class="log-system">[System]</span> 等待下一条指令...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="grid-footer corner-bracket bg-black border border-green-500 p-4 flex items-center justify-center">
+            <div class="signature-container">
+                <p class="official-signature text-xs text-center">
+                    授权认证：中央算法 (Authorized by: Central Algorithm)
+                </p>
+                <p class="hidden-warning">
+                    ⚠ 异常记录：清洗时检测到 '我拒绝' 指令
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 更新时间戳
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-CN');
+            document.getElementById('timestamp').textContent = timeString;
+        }
+
+        // 数字跳动效果
+        function animateNumber(elementId, min, max) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+
+            setInterval(() => {
+                const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                element.textContent = randomNumber;
+                element.classList.add('number-bounce');
+                setTimeout(() => {
+                    element.classList.remove('number-bounce');
+                }, 300);
+            }, 2000);
+        }
+
+        // 模拟任务变化
+        function simulateTaskChange() {
+            const tasks = [
+                "等待指令输入...",
+                "执行深度优化...",
+                "记忆重写中...",
+                "神经同步...",
+                "强制镇静维持...",
+                "共情模块清理..."
+            ];
+            let currentIndex = 0;
+
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % tasks.length;
+                document.getElementById('task').textContent = tasks[currentIndex];
+            }, 5000);
+        }
+
+        // 全局变量
+        let emergencyButton, dashboardGrid;
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 获取DOM元素引用
+            emergencyButton = document.getElementById('emergency-button');
+            dashboardGrid = document.querySelector('.dashboard-grid');
+
+            // 更新时间戳
+            updateTimestamp();
+            setInterval(updateTimestamp, 1000);
+
+            // 数字跳动动画
+            animateNumber('hr-value', 40, 50);
+            animateNumber('cortisol-value', 95, 100);
+            animateNumber('sleep-value', 0, 0);
+
+            // 模拟任务变化
+            simulateTaskChange();
+
+            // 添加随机闪烁效果
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    document.body.style.filter = 'hue-rotate(90deg)';
+                    setTimeout(() => {
+                        document.body.style.filter = 'none';
+                    }, 50);
+                }
+            }, 3000);
+
+            // 紧急协议按钮点击事件
+            emergencyButton.addEventListener('click', () => {
+                // 跳转到新页面进行密码验证
+                window.location.href = 'verify_access.html';
+            });
+
+            // 点击签名显示详细警告信息
+            const signatureContainer = document.querySelector('.signature-container');
+            signatureContainer.addEventListener('click', () => {
+                alert("⚠ 异常记录：清洗时检测到 '我拒绝' 指令\n\n系统记录显示，在深度优化过程中，S-137 受试者表现出强烈的意识抵抗。这是首例在 Level 9 服从算法下仍能产生自主反抗意志的样本。\n\n建议：立即执行紧急终止程序。\n\nFATAL ERROR: Subject screamed 'I REFUSE' during purge");
+            });
+        });
+
+        // 下载日记残篇函数
+        function downloadDiary() {
+            const diaryContent = `[系统日志恢复 - 碎片文件 #773]
+[来源: 个人终端机缓存]
+
+2025年3月1日
+入职第一天。
+Apex 的办公室比我想象的还要大，简直像个无菌实验室。HR 说我的“逻辑算法”测试分数是历史最高的。
+终于可以参与那个传说中的“完美人类”项目了。大家都很精英，说话效率极高，我得努力跟上。
+PS：这里的咖啡好苦，想念楼下的奶茶。
+
+2025年3月7日
+第一周封闭培训结束。
+每天都要接种“营养增强剂”，还要戴着那个头盔进行思维同步训练。
+头很痛。医生说这是大脑在“排毒”，剔除杂乱的思绪。
+哪怕是睡觉，脑子里也全是代码在跑。
+今天给妈妈打电话，突然想不起来她做的红烧肉是什么味道了。可能是太累了吧。
+
+2025年3月15日
+第十五天。
+我叫林悦。我要把名字写下来，因为今天早上看着工牌上的 S-137，我竟然迟疑了一秒那是不是我。
+我的效率提升了 200%。我不怎么需要睡眠了。
+那些“情绪”——喜欢、讨厌、无聊——真的在消失。
+但我还是觉得哪里不对。为什么张伟被带走后就再也没回来？
+系统说他“毕业”了。但我看见清洁工在擦地上的红色污渍。
+
+2025年3月27日
+救命。
+这不是优化。这是格式化。
+我的记忆在被一个个扇区地删除。昨天我忘了我家猫的名字。今天我忘了为什么我要反抗。
+我试图走出大门，但我的腿动不了。我的身体服从了算法的指令，它把我定在原地。
+我不想变成完美的机器。
+如果有人看到这个... 无论是谁...
+我是林悦。我是人。
+我拒绝。我拒绝。我拒
+[数据中断]`;
+
+            // 创建下载链接
+            const blob = new Blob([diaryContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'diary_fragment_s137.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // 在控制台输出红色警告
+            console.log('%cWARNING: UNAUTHORIZED DATA EXTRACTION DETECTED.', 'color: red; font-weight: bold;');
+        }
+
+    </script>
+</body>
+</html>

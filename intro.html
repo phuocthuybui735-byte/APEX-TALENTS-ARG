@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX：完美算法 - Apex Talents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.05em;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* 蓝白配色背景 */
+        .hero-bg {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #bae6fd 100%);
+            position: relative;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 85, 255, 0.1);
+        }
+
+        /* 轮播图机械感动画 */
+        .carousel-item {
+            transition: opacity 0.5s linear;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+        }
+
+        .carousel-item.inactive {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* 按钮点击反馈 */
+        .btn-click {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-click:active {
+            transform: scale(0.95);
+            background-color: #0044dd;
+        }
+
+        /* 进度条动画 */
+        @keyframes progress {
+            0% { width: 0%; }
+            90% { width: 90%; }
+            100% { width: 100%; }
+        }
+
+        /* 隐藏文字效果 */
+        .hidden-text {
+            color: transparent;
+            background-color: transparent;
+            user-select: none;
+        }
+
+        .hidden-text::selection {
+            color: #0055FF;
+            background-color: #e0e7ff;
+        }
+
+        /* 登录按钮悬停效果 */
+        .login-btn:hover {
+            background-color: #0044dd;
+            box-shadow: 0 0 20px rgba(0, 85, 255, 0.5);
+        }
+
+        /* 搜索框聚焦效果 */
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(0, 85, 255, 0.3);
+            border-color: #0055ff;
+        }
+
+        /* 错误动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* 脉冲动画 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="navbar fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 0L20 20H0L10 0z" />
+                    </svg>
+                    <span class="text-xl font-semibold tracking-wider text-blue-600">Apex Talents</span>
+                </div>
+
+                <!-- 导航链接 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="intro.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">首页</a>
+                    <a href="cases.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">成功案例</a>
+                    <a href="algorithm.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">算法介绍</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">联系我们</a>
+                    <button id="login-btn" class="login-btn px-6 py-2 bg-blue-600 text-white rounded-full font-medium btn-click">登录</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首屏 Hero Section -->
+    <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 hero-bg relative">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-light text-gray-900 mb-4 leading-tight">
+                Eliminating Human Bias,<br>
+                <span class="font-semibold text-blue-600">Only Perfection Remains.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 mb-2 font-medium">
+                消除人为偏见，只留完美人才
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
+                Join the 0.1%. Let our algorithm decide your true worth.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+                加入那0.1%。让算法决定你的真实价值。
+            </p>
+
+            <!-- 核心搜索组件 - 伪装成职位搜索的游戏控制台 -->
+            <div class="max-w-md mx-auto mb-12">
+                <div class="w-[600px] max-w-full h-16 bg-white border border-blue-300 rounded-full shadow-[0_0_15px_rgba(0,85,255,0.2)] flex items-center px-4 relative">
+                    <input type="text"
+                           id="search-input"
+                           class="search-input flex-1 bg-transparent border-none outline-none text-gray-900 font-mono text-sm placeholder-gray-400 h-full"
+                           placeholder="Enter Candidate ID or System Command... (输入候选人ID或系统指令...)">
+                    <button id="search-btn"
+                            class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                        <!-- 雷达/扫描图标 -->
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke-width="2" opacity="0.3"/>
+                            <path d="M12 1a1 1 0 011 1v3a1 1 0 01-2 0V2a1 1 0 011-1z" fill="currentColor"/>
+                            <path d="M12 21a1 1 0 011 1v3a1 1 0 01-2 0v-3a1 1 0 011-1z" fill="currentColor"/>
+                            <path d="M2 12a1 1 0 011-1h3a1 1 0 010 2H3a1 1 0 01-1-1z" fill="currentColor"/>
+                            <path d="M21 12a1 1 0 011-1h3a1 1 0 010 2h-3a1 1 0 01-1-1z" fill="currentColor"/>
+                            <path d="M4.93 4.93a1 1 0 011.41 0l2 2a1 1 0 01-1.41 1.41l-2-2a1 1 0 010-1.41z" fill="currentColor"/>
+                            <path d="M17.66 17.66a1 1 0 011.41 0l2 2a1 1 0 01-1.41 1.41l-2-2a1 1 0 010-1.41z" fill="currentColor"/>
+                            <path d="M4.93 19.07a1 1 0 011.41 0l2-2a1 1 0 01-1.41-1.41l-2 2a1 1 0 010 1.41z" fill="currentColor"/>
+                            <path d="M17.66 6.34a1 1 0 011.41 0l2-2a1 1 0 01-1.41-1.41l-2 2a1 1 0 010 1.41z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 精英人才展示 (Elite Showcase) -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 to-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-light text-center mb-16 text-gray-900">
+                本月完美员工 (Elite Employees of the Month)
+            </h2>
+
+            <!-- 轮播图容器 -->
+            <div class="relative overflow-hidden rounded-xl shadow-2xl h-[600px] md:h-[500px] lg:h-[450px]">
+                <div id="carousel-container" class="relative w-full h-full">
+
+                    <!-- Slide 1 - 基准样本 (张伟) -->
+                    <div class="carousel-item active absolute inset-0">
+                        <img src="images/employee_01.jpg" alt="张伟 - 高级算法工程师" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-8">
+                            <div class="mb-6">
+                                <h3 class="text-2xl font-semibold text-white mb-2">张伟 (Zhang Wei)</h3>
+                                <p class="text-blue-300 font-medium">高级算法工程师</p>
+                            </div>
+                            <div class="mb-6">
+                                <p class="text-white/90 italic text-sm mb-4">"在 Apex，我不再需要处理繁琐的人际关系，纯粹的数据让我感到自由。"</p>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm text-white/80">AI 匹配度</span>
+                                            <span class="text-sm font-semibold text-blue-300" id="score-0">98%</span>
+                                        </div>
+                                        <div class="w-full bg-white/20 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full score-bar" data-target="98"></div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                            <p class="text-xs text-white/70 mb-1">效率提升</p>
+                                            <p class="text-sm font-semibold text-white">150%</p>
+                                        </div>
+                                        <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                            <p class="text-xs text-white/70 mb-1">情绪波动率</p>
+                                            <p class="text-sm font-semibold text-white">&lt; 5%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2 - 国际化样本 (Sarah Jenkins) -->
+                    <div class="carousel-item inactive absolute inset-0">
+                        <img src="images/employee_02.jpg" alt="Sarah Jenkins - 全球战略总监" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-8">
+                            <div class="mb-6">
+                                <h3 class="text-2xl font-semibold text-white mb-2">Sarah Jenkins</h3>
+                                <p class="text-blue-300 font-medium">全球战略总监</p>
+                            </div>
+                            <div class="mb-6">
+                                <p class="text-white/90 italic text-sm mb-4">"跨越国界的完美协同，算法消除了所有文化误解。"</p>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm text-white/80">AI 匹配度</span>
+                                            <span class="text-sm font-semibold text-blue-300" id="score-1">99%</span>
+                                        </div>
+                                        <div class="w-full bg-white/20 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full score-bar" data-target="99"></div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                            <p class="text-xs text-white/70 mb-1">决策准确率</p>
+                                            <p class="text-sm font-semibold text-white">99.2%</p>
+                                        </div>
+                                        <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                            <p class="text-xs text-white/70 mb-1">团队服从度</p>
+                                            <p class="text-sm font-semibold text-white">98%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 - 关键线索 (林悦 - S-137) -->
+                    <div class="carousel-item inactive absolute inset-0">
+                        <img src="images/optimization_S-137.jpg" alt="林悦 - 战略资源部深度执行专员 (S-137)" class="w-full h-full object-cover" style="filter: saturate(0.8);">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-8">
+                            <div class="mb-6">
+                                <h3 class="text-2xl font-semibold text-white mb-2">林悦 (Lin Yue)</h3>
+                                <p class="text-blue-300 font-medium">战略资源部 - 深度执行专员 (S-137)</p>
+                            </div>
+                            <div class="mb-6">
+                                <p class="text-white/90 italic text-sm mb-4">"服从即是最高效的自由。"</p>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm text-white/80">AI 匹配度</span>
+                                            <span class="text-sm font-semibold text-blue-300" id="score-2">100%</span>
+                                        </div>
+                                        <div class="w-full bg-white/20 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full score-bar" data-target="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-red-500/20 p-3 rounded-lg backdrop-blur-sm border border-red-500/30">
+                                            <p class="text-xs text-white/70 mb-1">指令响应偏差 (Command Deviation)</p>
+                                            <p class="text-sm font-semibold text-red-400">0.00%</p>
+                                        </div>
+                                        <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                            <p class="text-xs text-white/70 mb-1">非必要逻辑保留 (Non-essential Logic)</p>
+                                            <p class="text-xs font-semibold text-white/50">0.01%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 轮播图指示器 -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
+                    <button class="carousel-indicator w-3 h-3 rounded-full bg-blue-300 hover:bg-blue-600 active" data-index="0"></button>
+                    <button class="carousel-indicator w-3 h-3 rounded-full bg-blue-300 hover:bg-blue-600" data-index="1"></button>
+                    <button class="carousel-indicator w-3 h-3 rounded-full bg-blue-300 hover:bg-blue-600" data-index="2"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <svg class="h-6 w-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 0L20 20H0L10 0z" />
+                        </svg>
+                        <span class="text-lg font-semibold tracking-wider text-blue-600">Apex Talents</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Eliminating human bias in recruitment.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-gray-900">About</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/about" class="text-gray-500 hover:text-blue-600 transition-colors">公司简介</a></li>
+                        <li><a href="/team" class="text-gray-500 hover:text-blue-600 transition-colors">团队介绍</a></li>
+                        <li><a href="/careers" class="text-gray-500 hover:text-blue-600 transition-colors">加入我们</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-gray-900">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/blog" class="text-gray-500 hover:text-blue-600 transition-colors">博客</a></li>
+                        <li><a href="/research" class="text-gray-500 hover:text-blue-600 transition-colors">研究报告</a></li>
+                        <li><a href="/support" class="text-gray-500 hover:text-blue-600 transition-colors">帮助中心</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-medium mb-4 text-gray-900">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/privacy" class="text-gray-500 hover:text-blue-600 transition-colors">隐私政策</a></li>
+                        <li><a href="/terms" class="text-gray-500 hover:text-blue-600 transition-colors">服务条款</a></li>
+                        <li><a href="/compliance" class="text-gray-500 hover:text-blue-600 transition-colors">合规信息</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    © 2025 Apex Talents. All rights reserved.
+                </p>
+
+                <p class="hidden-text text-sm">
+                    Help us S-137. The algorithm is watching.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 登录模态框 -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">身份验证 (Identity Verification)</h2>
+
+            <!-- 简历上传区域 -->
+            <div id="upload-section">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">上传简历 (Upload Resume)</h3>
+                    <p class="text-gray-600 mb-4">请上传您的最新简历以完成身份验证</p>
+                    <button id="upload-btn" class="btn-click px-6 py-2 bg-blue-600 text-white rounded-full font-medium">
+                        选择文件 (Select File)
+                    </button>
+                </div>
+
+                <!-- 假进度条 -->
+                <div id="progress-container" class="hidden mt-6">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2" id="progress-text">处理您的简历... (Processing your resume...)</p>
+                </div>
+
+                <!-- 错误信息 -->
+                <div id="error-message" class="hidden mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
+                    <p class="font-medium mb-1">错误代码: ERR-404-HUMANITY (Error Code: ERR-404-HUMANITY)</p>
+                    <p class="text-sm">您的身份不满足"完美员工"特质。(Your identity does not contain sufficient "perfect employee" traits.)</p>
+                </div>
+            </div>
+
+            <button id="close-modal" class="mt-6 w-full text-gray-600 hover:text-gray-800 transition-colors">
+                关闭 (Close)
+            </button>
+        </div>
+    </div>
+
+    <!-- 引入游戏引擎 -->
+    <script src="game.js"></script>
+    <script>
+        // 登录模态框功能
+        const loginBtn = document.getElementById('login-btn');
+        const loginModal = document.getElementById('login-modal');
+        const closeModal = document.getElementById('close-modal');
+        const uploadSection = document.getElementById('upload-section');
+        const uploadBtn = document.getElementById('upload-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const errorMessage = document.getElementById('error-message');
+
+        // 打开登录模态框
+        loginBtn.addEventListener('click', () => {
+            loginModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // 关闭登录模态框
+        closeModal.addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            // 重置表单
+            progressContainer.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            progressBar.style.width = '0%';
+        });
+
+        // 点击模态框外部关闭
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                closeModal.click();
+            }
+        });
+
+        // 上传按钮点击
+        uploadBtn.addEventListener('click', () => {
+            // 显示进度条
+            progressContainer.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+
+            // 模拟上传过程
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 2;
+                progressBar.style.width = width + '%';
+
+                if (width === 90) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.classList.add('hidden');
+                        errorMessage.classList.remove('hidden');
+                        progressBar.style.width = '0%';
+                    }, 1000);
+                }
+            }, 100);
+        });
+
+        // 轮播图功能
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+
+        // 切换轮播图
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+                slide.classList.toggle('inactive', i !== index);
+            });
+
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === index);
+            });
+        }
+
+        // 自动轮播
+        function autoPlay() {
+            setInterval(() => {
+                resetScoreAnimation();
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+                restartScoreAnimation(currentSlide);
+            }, 4000); // 机械感节奏：4秒切换一次
+        }
+
+        // 点击指示器切换
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                currentSlide = parseInt(indicator.dataset.index);
+                showSlide(currentSlide);
+            });
+        });
+
+        // 数据可视化 - 分数动态增长
+        function animateScore(element, target, duration = 2000) {
+            let current = 0;
+            const increment = target / (duration / 16); // 60fps
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current) + '%';
+                const bar = element.closest('div').querySelector('.score-bar');
+                if (bar) {
+                    bar.style.width = Math.floor(current) + '%';
+                }
+            }, 16);
+        }
+
+        // 初始化数据动画
+        function initScoreAnimation() {
+            const currentIndex = 0;
+            const scoreElement = document.getElementById(`score-${currentIndex}`);
+            if (scoreElement) {
+                const target = parseInt(scoreElement.closest('div').querySelector('.score-bar').dataset.target);
+                animateScore(scoreElement, target);
+            }
+        }
+
+        // 轮播图切换时重置动画
+        function resetScoreAnimation() {
+            // 停止所有正在运行的动画
+            const scoreElements = document.querySelectorAll('[id^="score-"]');
+            scoreElements.forEach(el => {
+                el.dataset.animation = 'stopped';
+            });
+        }
+
+        // 轮播图切换时重新启动动画
+        function restartScoreAnimation(index) {
+            const scoreElement = document.getElementById(`score-${index}`);
+            if (scoreElement) {
+                const target = parseInt(scoreElement.closest('div').querySelector('.score-bar').dataset.target);
+                animateScore(scoreElement, target);
+            }
+        }
+
+        // 点击指示器切换
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                resetScoreAnimation();
+                currentSlide = parseInt(indicator.dataset.index);
+                showSlide(currentSlide);
+                restartScoreAnimation(currentSlide);
+            });
+        });
+
+        // 搜索功能
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+
+        searchBtn.addEventListener('click', () => {
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+                window.gameAPI.search(searchTerm);
+            }
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    window.gameAPI.search(searchTerm);
+                }
+            }
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            autoPlay();
+            initScoreAnimation();
+        });
+    </script>
+</body>
+</html>

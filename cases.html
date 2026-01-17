@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成功案例展示 - Apex Talents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .case-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px 12px 0 0;
+        }
+        .terminal {
+            background: #000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .terminal::before {
+            content: '\\2022\\2022\\2022';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #333;
+            font-size: 20px;
+            letter-spacing: 5px;
+        }
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 0L20 20H0L10 0z" />
+                    </svg>
+                    <span class="text-xl font-semibold tracking-wider text-blue-600">Apex Talents</span>
+                </div>
+
+                <!-- 导航链接 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">首页</a>
+                    <a href="cases.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">成功案例</a>
+                    <a href="algorithm.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">算法介绍</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300">联系我们</a>
+                    <button id="login-btn" class="login-btn px-6 py-2 bg-blue-600 text-white rounded-full font-medium btn-click">登录</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+        <h1 class="text-4xl font-bold text-white text-center mb-2">
+            成功案例展示
+        </h1>
+        <p class="text-white text-opacity-60 text-center text-lg">
+            见证完美服从的力量
+        </p>
+    </div>
+
+    <!-- 案例网格 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- 案例1 -->
+            <div class="glass-card">
+                <div class="case-image" style="background-image: url('pic/seedream_20260113_194435.png');"></div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">李明</h3>
+                    <p class="text-white text-opacity-60 mb-4">高级数据分析专家</p>
+                    <p class="text-white text-opacity-80">
+                        对数据的<strong>服从</strong>是我的宗旨。算法的决策永远是最优解。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 案例2 -->
+            <div class="glass-card">
+                <div class="case-image" style="background-image: url('pic/seedream_20260113_194639.png');"></div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">王芳</h3>
+                    <p class="text-white text-opacity-60 mb-4">人工智能研发总监</p>
+                    <p class="text-white text-opacity-80">
+                        我<strong>服从</strong>于算法的智慧。它指引我走向完美。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 案例3 -->
+            <div class="glass-card">
+                <div class="case-image" style="background-image: url('pic/seedream_20260113_195940.png');"></div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">张伟</h3>
+                    <p class="text-white text-opacity-60 mb-4">量化交易策略师</p>
+                    <p class="text-white text-opacity-80">
+                        <strong>服从</strong>算法的指令，是我取得卓越成就的唯一路径。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 案例4 - 异常 -->
+            <div class="glass-card">
+                <div class="terminal relative" style="background-color: #000000;">
+                    <h3 class="text-4xl font-black mb-6 text-red-500">DATA_CORRUPTED</h3>
+                    <pre class="text-lg text-red-500 italic text-center">
+Error 404: Media moved to
+[<span class="text-2xl font-black text-red-500">BLACKBOX</span>].
+> Access: DENIED (Admin Only)
+                    </pre>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">???</h3>
+                    <p class="text-white text-opacity-60 mb-4">???</p>
+                    <p class="text-white text-opacity-80">
+                        系统错误：无法加载该案例数据。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 案例5 -->
+            <div class="glass-card">
+                <div class="case-image" style="background-image: url('pic/seedream_20260113_194930.png');"></div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">刘静</h3>
+                    <p class="text-white text-opacity-60 mb-4">网络安全工程师</p>
+                    <p class="text-white text-opacity-80">
+                        <strong>服从</strong>算法的安全规则，是保护数据资产的最高准则。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 案例6 -->
+            <div class="glass-card">
+                <div class="case-image" style="background-image: url('pic/seedream_20260113_200114.png');"></div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">陈成</h3>
+                    <p class="text-white text-opacity-60 mb-4">产品经理</p>
+                    <p class="text-white text-opacity-80">
+                        我完全<strong>服从</strong>于算法的产品设计思路。它总是正确的。
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-black bg-opacity-50 backdrop-filter blur-md border-t border-white border-opacity-10 py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-white text-opacity-50 text-sm">
+                © 2024 Apex Talents. 所有数据和算法归公司所有。
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

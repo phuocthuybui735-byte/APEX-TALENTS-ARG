@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人档案 - S-137</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(200, 220, 240, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .status-badge {
+            background-color: #00ff88;
+            color: #004d26;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .status-badge:hover {
+            background-color: #ff0000;
+            color: #ffffff;
+        }
+        .status-badge:hover .normal-text {
+            display: none;
+        }
+        .status-badge:hover .hover-text {
+            display: inline;
+        }
+        .corner-glitch {
+            position: absolute;
+            color: #ff0066;
+            font-family: monospace;
+            font-size: 12px;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        .glitch-1 {
+            top: 10px;
+            left: 10px;
+        }
+        .glitch-2 {
+            top: 10px;
+            right: 10px;
+            text-align: right;
+        }
+        .glitch-3 {
+            bottom: 10px;
+            left: 10px;
+        }
+        .glitch-4 {
+            bottom: 10px;
+            right: 10px;
+            text-align: right;
+        }
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .timeline-table th, .timeline-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .timeline-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .note {
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen">
+    <!-- 角落乱码 -->
+    <div class="corner-glitch glitch-1">
+        <pre>
+$#@!&%*$
+^&*()_+!
+~`|}{[]\
+        </pre>
+    </div>
+    <div class="corner-glitch glitch-2">
+        <pre>
+!@#$%^&*
+<>?:"{}|
+@#$%^&*()
+        </pre>
+    </div>
+    <div class="corner-glitch glitch-3">
+        <pre>
+`1234567890
+!@#$%^&*()
+{}|[]\\;':",./
+        </pre>
+    </div>
+    <div class="corner-glitch glitch-4">
+        <pre>
+=+_)(*&^%$#
+@!~`123456789
+0-=[]{};:?
+        </pre>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- 导航 -->
+        <div class="flex justify-between items-center mb-8">
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 font-semibold">
+                ← 返回首页
+            </a>
+            <div class="text-sm text-gray-500">
+                内部档案系统 v2.0.1
+            </div>
+        </div>
+
+        <!-- 档案卡片 -->
+        <div class="glass-card">
+            <div class="p-8">
+                <!-- 头部 -->
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <!-- 照片 -->
+                    <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-100 shadow-lg">
+                        <img src="images/optimization_S-137.jpg" alt="林悦" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- 基本信息 -->
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h1 class="text-3xl font-bold text-gray-800">林悦 (Lin Yue)</h1>
+                            <div class="status-badge">
+                                <span class="normal-text">OPTIMIZED (已优化)</span>
+                                <span class="hover-text hidden">WILL_STRIPPED (意志剥离)</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 mt-2">编号: S-137</p>
+                        <p class="text-gray-500">部门: 战略资源部</p>
+                        <p class="text-gray-500">职务: 深度执行专员</p>
+                    </div>
+                </div>
+
+                <!-- 个人简介 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">个人简介</h2>
+                    <p class="text-gray-600">
+                        林悦是一名高效执行型员工，具备出色的任务完成能力和高度的团队协作精神。她在战略资源部担任深度执行专员，主要负责重要项目的执行和协调工作。
+                    </p>
+                </div>
+
+                <!-- 生命周期表格 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">生命周期</h2>
+                    <table class="timeline-table">
+                        <tr>
+                            <th>项目</th>
+                            <th>日期</th>
+                            <th>状态</th>
+                        </tr>
+                        <tr>
+                            <td>入职日期</td>
+                            <td>2025-03-01</td>
+                            <td><span class="text-green-600 font-medium">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>培训周期</td>
+                            <td>2025-03-02 至 2025-03-10</td>
+                            <td><span class="text-green-600 font-medium">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>试用期</td>
+                            <td>2025-03-11 至 2025-03-28</td>
+                            <td><span class="text-green-600 font-medium">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>完全转化</td>
+                            <td>2025-03-29</td>
+                            <td><span class="text-blue-600 font-medium">优化完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>正式任职</td>
+                            <td>2025-03-30 至今</td>
+                            <td><span class="text-blue-600 font-medium">执行中</span></td>
+                        </tr>
+                    </table>
+                    <div class="note">
+                        驯服周期：？？？
+                    </div>
+                </div>
+
+                <!-- 技能评估 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">技能评估</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm text-gray-600">执行能力</span>
+                                <span class="text-sm font-medium text-gray-800">98%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 98%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm text-gray-600">服从指数</span>
+                                <span class="text-sm font-medium text-gray-800">100%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm text-gray-600">协作能力</span>
+                                <span class="text-sm font-medium text-gray-800">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm text-gray-600">忠诚度</span>
+                                <span class="text-sm font-medium text-gray-800">100%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 备注 -->
+                <div class="mt-8 p-4 bg-yellow-50 border-l-4 border-yellow-400">
+                    <p class="text-sm text-yellow-800">
+                        <strong>备注:</strong> 该员工表现出色，已通过公司最新优化程序，具备卓越的工作效率和完全的服从性。建议继续观察其长期表现。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
