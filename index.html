@@ -208,11 +208,101 @@
             <p>祝你好运，希望你还没被系统发现。</p>
         </div>
 
+        <div class="section">
+            <h2>游戏攻略</h2>
+            <p>如果在游戏中遇到困难，可以查看详细的通关攻略：</p>
+            <div class="note">
+                <p><strong>注意：</strong>攻略内容包含剧透，建议在卡关时查看。</p>
+            </div>
+            <div class="text-center">
+                <button id="toggle-guide" class="link-button" style="background-color: #ff9800;">
+                    [ 查看通关攻略 ]
+                </button>
+            </div>
+            <div id="guide-content" style="display: none; margin-top: 20px;">
+                <h3 style="color: #0055ff; margin-bottom: 15px;">《APEX：完美算法》调查员手册</h3>
+
+                <h4 style="color: #333; margin: 15px 0 10px 0;">第一阶段：信息搜集</h4>
+                <p><strong>目标：</strong>找到失踪姐姐林悦的公开档案，获取关键时间线索。</p>
+                <p><strong>所在位置：</strong>index.html (公司官网首页)</p>
+                <p><strong>提示：</strong>引言中提到林悦在公司内部的编号。既然是找人，不如在官网的搜索框里直接输入她的编号试试？</p>
+                <p><strong>操作：</strong>在搜索框输入 <span class="highlight">S-137</span> 并回车。</p>
+                <p><strong>结果：</strong>跳转至 profile_s137.html (公开档案页)。</p>
+                <p><strong>关键线索记录：</strong>注意档案里的时间——3月1日入职，3月29日状态变更为"转化完成"。</p>
+
+                <h4 style="color: #333; margin: 15px 0 10px 0;">第二阶段：寻找入口</h4>
+                <p><strong>目标：</strong>发现隐藏的内部登录界面。</p>
+                <p><strong>所在位置：</strong>index.html (公司官网首页)</p>
+                <p><strong>提示：</strong>查看成功案例中显示系统错误的图片内容。</p>
+                <p><strong>操作：</strong>在官网首页搜索框输入 <span class="highlight">BLACKBOX</span> 并回车。</p>
+                <p><strong>结果：</strong>跳转至 blackbox_login.html (黑盒登录页)。</p>
+
+                <h4 style="color: #333; margin: 15px 0 10px 0;">第三阶段：突破防火墙</h4>
+                <p><strong>目标：</strong>破解管理员密码，登录 Blackbox 系统。</p>
+                <p><strong>所在位置：</strong>blackbox_login.html</p>
+                <p><strong>提示：</strong>看着那只红色的眼睛。这家公司要求员工绝对的......？（答案藏在之前的成功案例界面文字中）。</p>
+                <p><strong>密码：</strong>输入 <span class="highlight">服从</span>。</p>
+
+                <h4 style="color: #333; margin: 15px 0 10px 0;">第四阶段：锁定目标 (二级验证)</h4>
+                <p><strong>目标：</strong>在后台数据库中解锁 S-137 的绝密档案。</p>
+                <p><strong>所在位置：</strong>admin_dashboard.html (内部控制台)</p>
+                <p><strong>提示：</strong>在列表中点击状态异常的 S-137。系统要求输入"转化周期 (Cycle Duration)"。</p>
+                <p><strong>答案：</strong>结合第一阶段发现的时间线：3月1日到3月29日，这中间经历了多少天？答案是 <span class="highlight">28</span> (29日减去1日)。</p>
+
+                <h4 style="color: #333; margin: 15px 0 10px 0;">第五阶段：终极解谜 (ROOT 权限)</h4>
+                <p><strong>目标：</strong>解锁底层权限，决定林悦的命运。</p>
+                <p><strong>所在位置：</strong>profile_s137_internal.html (绝密档案页)</p>
+                <p><strong>提示 1 (开启终端)：</strong>点击右下角红色的 [⚠ 紧急协议] 按钮。</p>
+                <p><strong>提示 2 (寻找三把密钥)：</strong>终端需要三个参数，它们藏在之前的页面中：</p>
+                <ul>
+                    <li>[KERNEL VER.]：去官网首页的"算法介绍 (Algorithm)"板块，找找隐藏的小字参数。</li>
+                    <li>[SERVER STATUS]：去"联系我们 (Contact)"页面查看右侧的服务器状态。</li>
+                    <li>[SUBJECT ID]：你正在调查的受体编号。</li>
+                </ul>
+                <p><strong>答案：</strong></p>
+                <ul>
+                    <li>密钥 1: <span class="highlight">v4.2</span></li>
+                    <li>密钥 2: <span class="highlight">CORRUPTED</span></li>
+                    <li>密钥 3: <span class="highlight">S-137</span></li>
+                </ul>
+
+                <h4 style="color: #333; margin: 15px 0 10px 0;">最终结局</h4>
+                <p><strong>目标：</strong>做出选择。</p>
+                <p><strong>结局 A (伪结局)：</strong>点击 [接入主网同步]。结果：你被反向定位，同化为系统的一部分。</p>
+                <p><strong>结局 B (真结局)：</strong>点击 [格式化扇区]。结果：彻底删除数据。对于被囚禁的意识来说，死亡即是自由。</p>
+
+                <h4 style="color: #333; margin: 15px 0 10px 0;">隐藏彩蛋</h4>
+                <ul>
+                    <li><strong>登录界面：</strong>在公司首页的登录按钮，点击上传简历后，会显示"错误代码: ERR-404-HUMANITY，您的身份不满足\"完美员工\"特质。"</li>
+                    <li><strong>破碎的日记：</strong>在内部档案页 (profile_s137_internal.html)，将鼠标移到右侧数据的 "人性残留: 0.02%" 上点击，可以下载林悦生前的日记残篇。</li>
+                    <li><strong>被划掉的真相：</strong>在内部档案页底部，鼠标划过"Authorized by Central Algorithm"签名，会浮现出她最后的呐喊："我拒绝"。</li>
+                </ul>
+            </div>
+        </div>
+
         <div class="text-center">
             <a href="intro.html" class="link-button">
                 [ 点击进入 Apex Talents 官网 ]
             </a>
         </div>
+
+        <script>
+            // 攻略折叠面板功能
+            document.getElementById('toggle-guide').addEventListener('click', function() {
+                const guideContent = document.getElementById('guide-content');
+                const button = document.getElementById('toggle-guide');
+
+                if (guideContent.style.display === 'none') {
+                    guideContent.style.display = 'block';
+                    button.textContent = '[ 收起攻略 ]';
+                    button.style.backgroundColor = '#e91e63';
+                } else {
+                    guideContent.style.display = 'none';
+                    button.textContent = '[ 查看通关攻略 ]';
+                    button.style.backgroundColor = '#ff9800';
+                }
+            });
+        </script>
 
         <div class="footer">
             <p>© 2025 Apex Talents. All rights reserved.</p>
